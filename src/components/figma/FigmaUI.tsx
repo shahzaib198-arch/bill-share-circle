@@ -15,7 +15,7 @@ import {
   Users,
   Settings,
   Layers,
-  figma
+  Figma
 } from 'lucide-react';
 
 const FigmaUI = () => {
@@ -46,7 +46,7 @@ const FigmaUI = () => {
       <div className="bg-gray-800 border-b border-gray-700 px-4 py-2 flex items-center justify-between">
         <div className="flex items-center space-x-4">
           <div className="flex items-center space-x-2">
-            <figma className="w-6 h-6 text-purple-400" />
+            <Figma className="w-6 h-6 text-purple-400" />
             <span className="font-semibold">Figma Clone</span>
           </div>
           <div className="text-sm text-gray-400">
