@@ -9,6 +9,7 @@ import Index from "./pages/Index";
 import Search from "./pages/Search";
 import Leases from "./pages/Leases";
 import Favorites from "./pages/Favorites";
+import Figma from "./pages/Figma";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -20,12 +21,12 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <div className="min-h-screen bg-gray-50">
-          <Navbar />
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/search" element={<Search />} />
             <Route path="/leases" element={<Leases />} />
             <Route path="/favorites" element={<Favorites />} />
+            <Route path="/figma" element={<Figma />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </div>
