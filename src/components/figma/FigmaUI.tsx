@@ -149,7 +149,7 @@ const FigmaUI = () => {
               variant={selectedTool === tool.id ? "default" : "ghost"}
               size="sm"
               className="w-10 h-10 p-0"
-              onClick={() => setSelectedTool(tool.id as any)}
+              onClick={() => setSelectedTool(tool.id as 'select' | 'rectangle' | 'circle' | 'text')}
             >
               <tool.icon className="w-4 h-4" />
             </Button>
