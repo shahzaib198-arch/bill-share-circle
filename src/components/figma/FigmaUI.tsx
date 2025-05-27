@@ -27,7 +27,7 @@ interface Element {
 const FigmaUI = () => {
   const [elements, setElements] = useState<Element[]>([]);
   const [selectedTool, setSelectedTool] = useState<'select' | 'rectangle' | 'circle' | 'text'>('select');
-  const [fileName, setFileName] = useState('Untitled Design');
+  const [fileName, setFileName] = useState('Untitled');
 
   const tools = [
     { id: 'select', icon: MousePointer, label: 'Select' },
@@ -77,9 +77,9 @@ const FigmaUI = () => {
         type: selectedTool,
         x,
         y,
-        width: selectedTool === 'text' ? 120 : 100,
-        height: selectedTool === 'text' ? 30 : 100,
-        content: selectedTool === 'text' ? 'New Text' : undefined,
+        width: selectedTool === 'text' ? 100 : 80,
+        height: selectedTool === 'text' ? 24 : 80,
+        content: selectedTool === 'text' ? 'Text' : undefined,
         selected: true
       };
       setElements([...elements.map(el => ({ ...el, selected: false })), newElement]);
@@ -88,34 +88,32 @@ const FigmaUI = () => {
   };
 
   const saveDesign = () => {
-    console.log('Saving design:', { fileName, elements });
-    alert('Design saved!');
+    console.log('Saved:', { fileName, elements });
+    alert('Saved!');
   };
 
   const exportDesign = () => {
-    console.log('Exporting design:', { fileName, elements });
-    alert('Design exported!');
+    console.log('Exported:', { fileName, elements });
+    alert('Exported!');
   };
 
   return (
-    <div className="h-screen bg-white flex flex-col">
+    <div className="h-screen bg-white flex flex-col border">
       {/* Header */}
-      <div className="h-12 bg-gray-50 border-b flex items-center justify-between px-4">
-        <div className="flex items-center gap-4">
-          <Input
-            value={fileName}
-            onChange={(e) => setFileName(e.target.value)}
-            className="w-48 h-8 text-sm border-0 bg-transparent"
-          />
-        </div>
+      <div className="h-10 border-b flex items-center justify-between px-3">
+        <Input
+          value={fileName}
+          onChange={(e) => setFileName(e.target.value)}
+          className="w-32 h-6 text-sm border-none shadow-none p-1"
+        />
         
-        <div className="flex items-center gap-2">
-          <Button variant="ghost" size="sm" onClick={saveDesign}>
-            <Save className="w-4 h-4 mr-1" />
+        <div className="flex gap-1">
+          <Button variant="ghost" size="sm" onClick={saveDesign} className="h-6 px-2 text-xs">
+            <Save className="w-3 h-3 mr-1" />
             Save
           </Button>
-          <Button variant="ghost" size="sm" onClick={exportDesign}>
-            <Download className="w-4 h-4 mr-1" />
+          <Button variant="ghost" size="sm" onClick={exportDesign} className="h-6 px-2 text-xs">
+            <Download className="w-3 h-3 mr-1" />
             Export
           </Button>
         </div>
@@ -123,49 +121,41 @@ const FigmaUI = () => {
 
       <div className="flex flex-1">
         {/* Toolbar */}
-        <div className="w-16 bg-gray-50 border-r flex flex-col items-center py-4 gap-2">
+        <div className="w-12 border-r flex flex-col items-center py-2 gap-1">
           {tools.map((tool) => (
             <Button
               key={tool.id}
               variant={selectedTool === tool.id ? "default" : "ghost"}
               size="sm"
-              className="w-10 h-10 p-0"
+              className="w-8 h-8 p-0"
               onClick={() => setSelectedTool(tool.id as 'select' | 'rectangle' | 'circle' | 'text')}
             >
-              <tool.icon className="w-4 h-4" />
+              <tool.icon className="w-3 h-3" />
             </Button>
           ))}
           
-          <div className="border-t w-8 my-2" />
+          <div className="border-t w-6 my-1" />
           
-          <Button variant="ghost" size="sm" className="w-10 h-10 p-0" onClick={duplicateSelected}>
-            <Copy className="w-4 h-4" />
+          <Button variant="ghost" size="sm" className="w-8 h-8 p-0" onClick={duplicateSelected}>
+            <Copy className="w-3 h-3" />
           </Button>
-          <Button variant="ghost" size="sm" className="w-10 h-10 p-0" onClick={deleteSelected}>
-            <Trash2 className="w-4 h-4" />
+          <Button variant="ghost" size="sm" className="w-8 h-8 p-0" onClick={deleteSelected}>
+            <Trash2 className="w-3 h-3" />
           </Button>
         </div>
 
         {/* Canvas */}
-        <div className="flex-1 bg-gray-100 relative overflow-hidden">
+        <div className="flex-1 bg-white relative overflow-hidden">
           <div
             className="w-full h-full relative cursor-crosshair"
             onClick={handleCanvasClick}
-            style={{
-              backgroundImage: `
-                linear-gradient(rgba(0,0,0,0.1) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(0,0,0,0.1) 1px, transparent 1px)
-              `,
-              backgroundSize: '20px 20px'
-            }}
           >
-            {/* Canvas Elements */}
             {elements.map((element) => (
               <div
                 key={element.id}
-                className={`absolute border-2 ${
-                  element.selected ? 'border-blue-500' : 'border-gray-400'
-                } cursor-move`}
+                className={`absolute border cursor-move ${
+                  element.selected ? 'border-black border-2' : 'border-gray-400'
+                }`}
                 style={{
                   left: element.x,
                   top: element.y,
@@ -180,7 +170,7 @@ const FigmaUI = () => {
                 }}
               >
                 {element.type === 'text' && (
-                  <div className="w-full h-full flex items-center justify-center text-sm">
+                  <div className="w-full h-full flex items-center justify-center text-xs">
                     {element.content}
                   </div>
                 )}
@@ -189,45 +179,41 @@ const FigmaUI = () => {
           </div>
         </div>
 
-        {/* Properties Panel */}
-        <div className="w-64 bg-gray-50 border-l p-4">
-          <div className="space-y-4">
-            <div>
-              <h3 className="text-sm font-medium mb-2">Elements</h3>
-              <div className="space-y-1">
-                {elements.map((element) => (
-                  <div
-                    key={element.id}
-                    className={`p-2 text-sm cursor-pointer rounded ${
-                      element.selected ? 'bg-blue-100' : 'hover:bg-gray-100'
-                    }`}
-                    onClick={() => selectElement(element.id)}
-                  >
-                    {element.type} - {element.content || `${element.width}x${element.height}`}
-                  </div>
-                ))}
+        {/* Properties */}
+        <div className="w-48 border-l p-2">
+          <div className="text-xs font-medium mb-2">Elements</div>
+          <div className="space-y-1">
+            {elements.map((element) => (
+              <div
+                key={element.id}
+                className={`p-1 text-xs cursor-pointer ${
+                  element.selected ? 'bg-gray-200' : 'hover:bg-gray-100'
+                }`}
+                onClick={() => selectElement(element.id)}
+              >
+                {element.type}
+              </div>
+            ))}
+          </div>
+          
+          {elements.some(el => el.selected) && (
+            <div className="mt-4">
+              <div className="text-xs font-medium mb-2">Properties</div>
+              <div className="space-y-1 text-xs text-gray-600">
+                {(() => {
+                  const selected = elements.find(el => el.selected);
+                  return selected ? (
+                    <>
+                      <div>X: {selected.x}</div>
+                      <div>Y: {selected.y}</div>
+                      <div>W: {selected.width}</div>
+                      <div>H: {selected.height}</div>
+                    </>
+                  ) : null;
+                })()}
               </div>
             </div>
-            
-            {elements.some(el => el.selected) && (
-              <div>
-                <h3 className="text-sm font-medium mb-2">Properties</h3>
-                <div className="space-y-2 text-sm text-gray-600">
-                  {(() => {
-                    const selected = elements.find(el => el.selected);
-                    return selected ? (
-                      <>
-                        <div>X: {selected.x}px</div>
-                        <div>Y: {selected.y}px</div>
-                        <div>W: {selected.width}px</div>
-                        <div>H: {selected.height}px</div>
-                      </>
-                    ) : null;
-                  })()}
-                </div>
-              </div>
-            )}
-          </div>
+          )}
         </div>
       </div>
     </div>
