@@ -1,20 +1,16 @@
 
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { 
   Square, 
   Circle, 
   Type, 
-  Move, 
   MousePointer,
   Trash2,
   Copy,
   Download,
-  Save,
-  Undo,
-  Redo
+  Save
 } from 'lucide-react';
 
 interface Element {
@@ -39,20 +35,6 @@ const FigmaUI = () => {
     { id: 'circle', icon: Circle, label: 'Circle' },
     { id: 'text', icon: Type, label: 'Text' },
   ];
-
-  const addElement = (type: 'rectangle' | 'circle' | 'text') => {
-    const newElement: Element = {
-      id: Date.now().toString(),
-      type,
-      x: 100 + elements.length * 20,
-      y: 100 + elements.length * 20,
-      width: type === 'text' ? 120 : 100,
-      height: type === 'text' ? 30 : 100,
-      content: type === 'text' ? 'Text Element' : undefined,
-      selected: false
-    };
-    setElements([...elements, newElement]);
-  };
 
   const selectElement = (id: string) => {
     setElements(elements.map(el => ({
@@ -81,7 +63,6 @@ const FigmaUI = () => {
 
   const handleCanvasClick = (e: React.MouseEvent<HTMLDivElement>) => {
     if (selectedTool === 'select') {
-      // Deselect all elements
       setElements(elements.map(el => ({ ...el, selected: false })));
       return;
     }
@@ -90,7 +71,7 @@ const FigmaUI = () => {
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
 
-    if (selectedTool !== 'select') {
+    if (selectedTool === 'rectangle' || selectedTool === 'circle' || selectedTool === 'text') {
       const newElement: Element = {
         id: Date.now().toString(),
         type: selectedTool,
